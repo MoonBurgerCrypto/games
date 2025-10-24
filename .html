@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Game Hub</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>🎮 My Game Hub</h1>
+  <input type="text" id="searchBar" placeholder="Search games...">
+</header>
+
+<button class="back" id="backBtn" onclick="closeGame()">⬅ Back to Games</button>
+
+<iframe id="gameFrame" allowfullscreen></iframe>
+
+<div class="grid" id="gameGrid"></div>
+
+<script>
+  // 🎯 Game list (title, URL, and thumbnail image)
+  const games = [
+    { title: "Drift Boss", url: "https://www.mathplayground.com/pg_drift_boss.html", img: "https://i.ibb.co/1M7K7RL/driftboss.jpg" },
+    { title: "Slope", url: "https://www.slopegame.io/", img: "https://i.ibb.co/b7CKBvL/slope.jpg" },
+    { title: "Moto X3M", url: "https://www.crazygames.com/game/moto-x3m", img: "https://i.ibb.co/nMyCvyj/motox3m.jpg" },
+    { title: "1v1.LOL", url: "https://1v1.lol/", img: "https://i.ibb.co/Tm6mLSW/1v1lol.jpg" },
+    { title: "Basket Random", url: "https://www.crazygames.com/game/basket-random", img: "https://i.ibb.co/0DgBnLr/basketrandom.jpg" },
+    { title: "Retro Bowl", url: "https://www.crazygames.com/game/retro-bowl", img: "https://i.ibb.co/JyQdBKC/retrobowl.jpg" }
+  ];
+
+  const grid = document.getElementById("gameGrid");
+  const frame = document.getElementById("gameFrame");
+  const backBtn = document.getElementById("backBtn");
+  const searchBar = document.getElementById("searchBar");
+
+  // Render games
+  function renderGames(filter = "") {
+    grid.innerHTML = "";
+    games
+      .filter(g => g.title.toLowerCase().includes(filter.toLowerCase()))
+      .forEach(game => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${game.img}" alt="${game.title}">
+          <h3>${game.title}</h3>
+        `;
+        card.onclick = () => openGame(game.url);
+        grid.appendChild(card);
+      });
+  }
+
+  // Search function
+  searchBar.addEventListener("input", e => {
+    renderGames(e.target.value);
+  });
+
+  // Open game in iframe
+  function openGame(url) {
+    frame.src = url;
+    frame.style.display = "block";
+    grid.style.display = "none";
+    backBtn.style.display = "inline-block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // Back to game list
+  function closeGame() {
+    frame.src = "";
+    frame.style.display = "none";
+    grid.style.display = "grid";
+    backBtn.style.display = "none";
+  }
+
+  // Load games on start
+  renderGames();
+</script>
+
+</body>
+</html>
